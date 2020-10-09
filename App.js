@@ -44,7 +44,6 @@ class App extends React.Component {
 			dataSourceCoordinates : {}
 		}
 		this.addIds();
-		console.warn(JSON.stringify(CONTACTS));
 	}
 
 	addIds() {
@@ -93,6 +92,7 @@ class App extends React.Component {
 
 /**
  * KeyedView is a View that has a unique id.
+ * It's used to display an item in the list with a name and description text.
  */
 class KeyedView extends React.Component {
 	constructor(props) {
@@ -108,11 +108,17 @@ class KeyedView extends React.Component {
 		});
 	}
 
-	render () { return (<View key={this.props.key} onLayout={this.handleOnLayout} style={this.props.style}>
-	<Text style={styles.item}>{this.props.name}</Text>
-	{this.props.desc &&
-	<Text style={styles.item}>{this.props.desc}</Text>
-	}
+	/**
+	 * Does not render the description unless it is not empty.
+	 * So, each item in the list will have a different height, depending on
+	 * whether or not the item has a description.
+	 */
+	render () {
+		return (<View key={this.props.id} onLayout={this.handleOnLayout} style={this.props.style}>
+		<Text style={styles.item}>{this.props.name}</Text>
+		{this.props.desc &&
+		<Text style={styles.item}>{this.props.desc}</Text>
+		}
 	</View>);
 	}
 
