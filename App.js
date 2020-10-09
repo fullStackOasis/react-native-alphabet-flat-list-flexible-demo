@@ -13,9 +13,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import SWAlphabetFlatList from 'react-native-alphabet-flat-list-flexible';
+import { CustomSectionHeader } from './CustomSectionHeader';
 
 // Demo list of items.
-const CONTACTS = {
+let CONTACTS = {
 	A: [{name:'Edith Abbott'}, {name:'Kenneth Arrow',desc:"a major figure in post-World War II neo-classical economic theory"}],
 	B: [{name:'Robert Barro'}, {name:'Walter Block'} ],
 	C: [{name:'John Elliot Cairnes', desc: "often described as the \"last of the classical economists\""}, {name:'Gustav Cassel'}, {name:'Jean-Baptiste Colbert'}],
@@ -34,8 +35,6 @@ const CONTACTS = {
 	B: [{name:'B', id:3}, {name:'BBBB', id:4} ]
 };
 */
-const ITEM_HEIGHT = 100;
-const SECTION_HEADER_HEIGHT = 30;
 
 class App extends React.Component {
 	constructor(props) {
@@ -44,8 +43,17 @@ class App extends React.Component {
 		this.state = {
 			dataSourceCoordinates : {}
 		}
-		Object.keys(CONTACTS).forEach((el, i) => el['id'] = i);
+		this.addIds();
 		console.warn(JSON.stringify(CONTACTS));
+	}
+
+	addIds() {
+		let counter = 0;
+		Object.keys(CONTACTS).forEach(function(letter) {
+			CONTACTS[letter].forEach(function(obj) {
+				obj['id'] = counter++;
+			});
+		});
 	}
 
 	handleChildLayout = (data) => {
@@ -77,8 +85,7 @@ class App extends React.Component {
 		<SWAlphabetFlatList
 			data={CONTACTS}
 			renderItem={this.renderEach}
-			itemHeight={ITEM_HEIGHT}
-			sectionHeaderHeight={SECTION_HEADER_HEIGHT}
+			sectionHeaderComponent={CustomSectionHeader}
 			dataSourceCoordinates={this.state.dataSourceCoordinates}
 		/>);
 	}
@@ -111,14 +118,24 @@ class KeyedView extends React.Component {
 
 };
 
+/**
+ * These styles are used to style each header and item in the list.
+ * You can change section header height and item height here.
+ */
 const styles = StyleSheet.create({
 	item: {
-	  paddingHorizontal: 10,
-	  paddingVertical: 10
+	  paddingHorizontal: 15,
+	  paddingVertical: 15,
+	  height:200
 	},
 	header: {
 	  fontSize: 12,
-	  fontFamily: 'Cochin'
+	  fontFamily: 'Cochin',
+	  paddingHorizontal: 15,
+	  paddingVertical: 15,
+	  height:40,
+	  borderWidth:10,
+	  borderColor:'green'
 	}
   });
   
